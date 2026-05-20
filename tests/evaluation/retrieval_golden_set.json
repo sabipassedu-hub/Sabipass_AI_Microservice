@@ -1,0 +1,17 @@
+[
+  {
+    "query": "what are surds",
+    "topic": "surds",
+    "expected_chunk_id": "waec_math_mock_2024_001_q03"
+  },
+  {
+    "query": "wetin be indices abeg explain am",
+    "topic": "indices",
+    "expected_chunk_id": "waec_math_mock_2024_001_q04"
+  },
+  {
+    "query": "solve x squared plus 5x plus 6",
+    "topic": "quadratic_equations",
+    "expected_chunk_id": "waec_math_mock_2024_001_q05"
+  }
+]

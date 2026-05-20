@@ -1,5 +1,6 @@
 ﻿# Python
 venv/
+.venv/
 __pycache__/
 *.pyc
 *.pyo
@@ -23,3 +24,7 @@ coverage.xml
 # .gitignore
 .env
 .aider*
+data/raw/
+data/embeddings/
+data/test_embeddings/
+data/logs/*.jsonl

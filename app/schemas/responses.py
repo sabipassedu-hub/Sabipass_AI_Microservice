@@ -1,6 +1,14 @@
 from typing import Literal, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+
+
+ResponseType = Literal[
+    "text_only",
+    "canvas_required",
+    "micro_clarification",
+    "zero_pass_response",
+]
 
 
 class CanvasDirective(BaseModel):
@@ -22,7 +30,11 @@ class NeuralSyncPayload(BaseModel):
 
 
 class SabiNeuralResponse(BaseModel):
+    request_id: str = ""
+    response_type: ResponseType = "canvas_required"
+    is_atomic: bool = True
     tutor_conversational_text: str
     canvas_directive: Optional[CanvasDirective]
     micro_rewards: Optional[MicroRewards]
-    neural_sync_payload: NeuralSyncPayload
+    neural_sync_payload: Optional[NeuralSyncPayload]
+    system_metadata: dict = Field(default_factory=dict)
