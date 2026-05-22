@@ -6,7 +6,7 @@ layers may execute the strategy but must not mutate or reinterpret it.
 """
 
 from dataclasses import dataclass
-from typing import Literal
+from typing import Any, Literal
 
 
 ExecutionPath = Literal["single_pass", "two_pass"]
@@ -20,6 +20,10 @@ TeachingMode = Literal[
     "remediation",
     "direct_answer",
     "clarification",
+    "guided_example",
+    "practice",
+    "evaluation",
+    "system_intervention",
 ]
 Urgency = Literal["low", "normal", "high"]
 
@@ -74,6 +78,9 @@ class StateStrategy:
     rag_strategy: RagStrategy
     pedagogy_strategy: PedagogyStrategy
     model_strategy: ModelStrategy
+    learning_state: Any | None = None
+    state_control: dict[str, Any] | None = None
+    action_plan: Any | None = None
 
     def __post_init__(self) -> None:
         if not 0 <= self.complexity_score <= 5:

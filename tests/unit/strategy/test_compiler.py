@@ -63,6 +63,24 @@ def valid_payload(
             "active_weakness_arrays": ["algebra"],
             "passed_topics_arrays": ["fractions_decimals_percentages"],
         },
+        "learning_session_state": {
+            "topic": "algebra",
+            "subtopic": topic_node or "linear_equations",
+            "micro_skill": topic_node or "linear_equations",
+            "phase": "practice",
+            "attempt": max(1, errors_on_same_concept_space),
+            "streak": 1,
+            "mastery_score": 0.62,
+            "state_version": 1,
+            "current_question_id": None,
+            "last_question_ids": [],
+            "correct_pattern": [],
+            "response_time_ms": None,
+            "confidence_level": "medium",
+            "hints_used": 0,
+            "difficulty_level": "easy",
+            "is_retention_check": False,
+        },
     }
 
 
@@ -88,7 +106,19 @@ def test_compile_state_strategy_builds_precision_strategy_from_strict_concept():
     }
     assert strategy.pedagogy_strategy.intent_type == "explanation"
     assert strategy.pedagogy_strategy.teaching_mode == "direct_instruction"
+    assert strategy.action_plan.action_type == "explain_step"
+    assert strategy.action_plan.state_mutation_allowed is False
     assert strategy.model_strategy.tier == "free"
+
+
+def test_compile_state_strategy_routes_homework_mode_to_curriculum_vault():
+    strategy = compile_state_strategy(
+        build_request(app_execution_mode="homework_explainer"),
+        registry_snapshot=load_registry(),
+    )
+
+    assert strategy.rag_strategy.mode == "precision"
+    assert strategy.rag_strategy.target_collection == "curriculum_vault"
 
 
 def test_compile_state_strategy_allows_premium_two_pass_for_high_complexity():
@@ -112,16 +142,46 @@ def test_compile_state_strategy_allows_premium_two_pass_for_high_complexity():
     assert strategy.model_strategy.execution_path == "two_pass"
 
 
-def test_compile_state_strategy_uses_fallback_for_degraded_math_concept():
+def test_compile_state_strategy_uses_learning_state_for_degraded_math_followup():
     request = build_request(raw_whiteboard_input="I need help with this mathematics question from class.")
 
     strategy = compile_state_strategy(request, registry_snapshot=load_registry())
 
-    assert strategy.normalized_concept == "general_mathematics"
-    assert strategy.normalization_status == "degraded"
-    assert strategy.rag_strategy.mode == "fallback"
-    assert strategy.rag_strategy.target_collection is None
-    assert strategy.rag_strategy.top_k == 0
+    assert strategy.normalized_concept == "linear_equations"
+    assert strategy.normalization_status == "strict"
+    assert strategy.rag_strategy.mode == "precision"
+    assert strategy.rag_strategy.query_concept_key == "linear_equations"
+
+
+def test_compile_state_strategy_keeps_known_topic_for_math_followup_without_topic_words():
+    request = build_request(
+        app_execution_mode="curriculum_coach",
+        raw_whiteboard_input="Why do we subtract 4 from both sides in 2x + 4 = 10?",
+        topic_node="linear_equations",
+    )
+
+    strategy = compile_state_strategy(request, registry_snapshot=load_registry())
+
+    assert strategy.normalized_concept == "linear_equations"
+    assert strategy.normalization_status == "strict"
+    assert strategy.pedagogy_strategy.response_format == "text_only"
+    assert strategy.action_plan.action_type == "explain_step"
+    assert strategy.rag_strategy.mode == "precision"
+
+
+def test_compile_state_strategy_keeps_mixed_intent_explanation_and_candidate_answer():
+    request = build_request(
+        app_execution_mode="curriculum_coach",
+        raw_whiteboard_input="I think it's 8 but why did the 4 disappear?",
+        topic_node="linear_equations",
+    )
+
+    strategy = compile_state_strategy(request, registry_snapshot=load_registry())
+
+    assert strategy.pedagogy_strategy.intent_type == "explanation"
+    assert strategy.action_plan.action_type == "explain_step"
+    assert strategy.action_plan.candidate_answer == "8"
+    assert strategy.action_plan.state_mutation_allowed is False
 
 
 def test_compile_state_strategy_requests_clarification_for_non_math_prompt():
@@ -133,4 +193,17 @@ def test_compile_state_strategy_requests_clarification_for_non_math_prompt():
     assert strategy.normalization_status == "needs_clarification"
     assert strategy.rag_strategy.mode == "none"
     assert strategy.pedagogy_strategy.teaching_mode == "clarification"
+    assert strategy.pedagogy_strategy.response_format == "micro_clarification"
+
+
+def test_compile_state_strategy_clarifies_unclear_noise_without_resetting_topic():
+    request = build_request(
+        app_execution_mode="curriculum_coach",
+        raw_whiteboard_input="hmm",
+    )
+
+    strategy = compile_state_strategy(request, registry_snapshot=load_registry())
+
+    assert strategy.normalized_concept is None
+    assert strategy.normalization_status == "needs_clarification"
     assert strategy.pedagogy_strategy.response_format == "micro_clarification"

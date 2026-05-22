@@ -106,3 +106,9 @@ stays short, current, and fast to read.
 - Added `.env`-aware settings defaults for Groq/LiteLLM model routing and history limits.
 - Replaced runtime hash embeddings with FastEmbed, seeded all local demo Chroma collections, and added retrieval golden-set coverage.
 - Added SymPy/math-verify grounding for surds and quadratic expressions; verified live API scenarios and full suite: 120 passed.
+
+## 2026-05-21 - Demo Bottleneck Fixes
+
+- Added resolved `model_name` to response metadata so the demo can show the actual configured model, not just the env var.
+- Made `scripts/seed_db.py` prewarm FastEmbed before seeding Chroma and documented it as the VC-demo warmup step.
+- Set pytest basetemp/cache into workspace `.pytest_tmp`; verified prewarm and normal full suite: 122 passed.

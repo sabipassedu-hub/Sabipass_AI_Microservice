@@ -37,8 +37,8 @@ def test_pidgin_confusion_and_step_request_increase_complexity():
 def test_high_tolerance_keeps_stable_direct_answer_request_moderate():
     signals = ComplexitySignals(
         raw_input="Find x if 3x + 1 = 10.",
-        intent="answer_request",
+        intent="evaluation",
         complexity_tolerance="high",
     )
 
-    assert score_complexity(signals) == 2
+    assert score_complexity(signals) == 1

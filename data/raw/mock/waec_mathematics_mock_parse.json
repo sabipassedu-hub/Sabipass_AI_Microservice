@@ -1,0 +1,93 @@
+{
+  "parser_version": "mock_pdf_parser_v1",
+  "source_document": {
+    "doc_id": "waec_math_mock_2024_001",
+    "source_type": "mock_pdf_parse",
+    "subject": "mathematics",
+    "exam_type": "WAEC",
+    "academic_stage": "senior_secondary",
+    "year": 2024
+  },
+  "questions": [
+    {
+      "question_id": "waec_math_mock_2024_001_q01",
+      "page_number": 1,
+      "topic": "linear_equations",
+      "difficulty": "easy",
+      "question_text": "If 3x + 4 = 19, find the value of x.",
+      "answer_options": {
+        "A": "3",
+        "B": "4",
+        "C": "5",
+        "D": "6"
+      },
+      "correct_answer": "C",
+      "has_worked_solution": true,
+      "worked_solution": "Subtract 4 from both sides to get 3x = 15. Divide both sides by 3, so x = 5."
+    },
+    {
+      "question_id": "waec_math_mock_2024_001_q02",
+      "page_number": 2,
+      "topic": "trigonometric_ratios",
+      "difficulty": "medium",
+      "question_text": "A ladder leans against a wall. The ladder is 10 m long and makes an angle of 30 degrees with the ground. How high up the wall does it reach?",
+      "answer_options": {
+        "A": "5 m",
+        "B": "8 m",
+        "C": "10 m",
+        "D": "20 m"
+      },
+      "correct_answer": "A",
+      "has_worked_solution": true,
+      "worked_solution": "The height is opposite the 30 degree angle and the ladder is the hypotenuse. Use sin 30 = height / 10. Since sin 30 = 1/2, height = 10 x 1/2 = 5 m."
+    },
+    {
+      "question_id": "waec_math_mock_2024_001_q03",
+      "page_number": 3,
+      "topic": "surds",
+      "difficulty": "easy",
+      "question_text": "Which of the following is a surd?",
+      "answer_options": {
+        "A": "sqrt(4)",
+        "B": "sqrt(9)",
+        "C": "sqrt(2)",
+        "D": "4"
+      },
+      "correct_answer": "C",
+      "has_worked_solution": true,
+      "worked_solution": "A surd is an irrational root that cannot simplify to a rational number. sqrt(2) cannot simplify exactly, while sqrt(4) = 2 and sqrt(9) = 3."
+    },
+    {
+      "question_id": "waec_math_mock_2024_001_q04",
+      "page_number": 4,
+      "topic": "indices",
+      "difficulty": "easy",
+      "question_text": "Simplify 2^3 x 2^2.",
+      "answer_options": {
+        "A": "2^5",
+        "B": "2^6",
+        "C": "4^5",
+        "D": "2^1"
+      },
+      "correct_answer": "A",
+      "has_worked_solution": true,
+      "worked_solution": "When multiplying powers with the same base, add the indices. So 2^3 x 2^2 = 2^(3 + 2) = 2^5."
+    },
+    {
+      "question_id": "waec_math_mock_2024_001_q05",
+      "page_number": 5,
+      "topic": "quadratic_equations",
+      "difficulty": "medium",
+      "question_text": "Solve x^2 + 5x + 6 = 0.",
+      "answer_options": {
+        "A": "x = 2 or x = 3",
+        "B": "x = -2 or x = -3",
+        "C": "x = -1 or x = -6",
+        "D": "x = 1 or x = 6"
+      },
+      "correct_answer": "B",
+      "has_worked_solution": true,
+      "worked_solution": "Factorise x^2 + 5x + 6 as (x + 2)(x + 3). Set each factor to zero, so x = -2 or x = -3."
+    }
+  ]
+}

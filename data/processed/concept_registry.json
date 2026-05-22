@@ -73,6 +73,15 @@
       "academic_stages": ["junior_secondary", "senior_secondary"],
       "description": "Solving first-degree equations and isolating unknowns such as x."
     },
+    "solving_basic_equations": {
+      "display_name": "Solving Basic Equations",
+      "subject": "mathematics",
+      "strand": "algebra",
+      "parent_key": "linear_equations",
+      "exam_coverage": ["WAEC", "JAMB"],
+      "academic_stages": ["junior_secondary", "senior_secondary"],
+      "description": "Using inverse operations to solve one-step and two-step linear equations."
+    },
     "simultaneous_equations": {
       "display_name": "Simultaneous Equations",
       "subject": "mathematics",
@@ -251,6 +260,11 @@
     "make x stand alone": "linear_equations",
     "find x": "linear_equations",
     "how i go find x": "linear_equations",
+    "solving simple equations": "solving_basic_equations",
+    "solving basic equations": "solving_basic_equations",
+    "basic equations": "solving_basic_equations",
+    "one step equation": "solving_basic_equations",
+    "two step equation": "solving_basic_equations",
     "solve for x": "linear_equations",
     "linear equation": "linear_equations",
     "linear equations": "linear_equations",
@@ -352,6 +366,7 @@
     "logarithms": "algebra",
     "surds": "algebra",
     "linear_equations": "algebra",
+    "solving_basic_equations": "linear_equations",
     "simultaneous_equations": "algebra",
     "quadratic_equations": "algebra",
     "inequalities": "algebra",

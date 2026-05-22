@@ -9,10 +9,14 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from app.rag.embeddings import warm_embedding_model
 from pipelines.ingestion.chroma_seed import seed_demo_collections
 
 
 def main() -> int:
+    model_name = warm_embedding_model()
+    print(f"Prewarmed FastEmbed model: {model_name}")
+
     result = seed_demo_collections()
     print(f"Seeded {result.exam_bank.records_seeded} records into exam_bank.")
     print(f"Seeded {result.curriculum_vault.records_seeded} records into curriculum_vault.")

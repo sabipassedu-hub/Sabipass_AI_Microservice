@@ -94,6 +94,7 @@ Allowed values:
 
 - `exam_prep`
 - `curriculum_coach`
+- `homework_explainer`
 - `general_prompt`
 - `navigation_click`
 
@@ -192,6 +193,8 @@ Node.js must send:
 
 - authenticated student identity;
 - subscription tier;
+- for the VC demo, default student chat requests to `tier: "free"` and keep
+  Premium model selection as a client-side upsell only;
 - current efficiency-mode setting;
 - academic scope and exam target;
 - bounded recent history;

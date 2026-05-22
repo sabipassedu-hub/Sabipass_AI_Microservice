@@ -52,6 +52,24 @@ def build_request(raw_whiteboard_input: str) -> NeuralChatRequest:
                 "active_weakness_arrays": ["algebra"],
                 "passed_topics_arrays": [],
             },
+            "learning_session_state": {
+                "topic": "algebra",
+                "subtopic": "linear_equations",
+                "micro_skill": "linear_equations",
+                "phase": "practice",
+                "attempt": 1,
+                "streak": 1,
+                "mastery_score": 0.62,
+                "state_version": 1,
+                "current_question_id": None,
+                "last_question_ids": [],
+                "correct_pattern": [],
+                "response_time_ms": None,
+                "confidence_level": "medium",
+                "hints_used": 0,
+                "difficulty_level": "easy",
+                "is_retention_check": False,
+            },
         }
     )
 

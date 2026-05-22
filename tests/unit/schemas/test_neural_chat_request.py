@@ -1,7 +1,14 @@
 import pytest
 from pydantic import ValidationError
 
-from app.schemas.requests import NeuralChatRequest
+from app.schemas.requests import (
+    MAX_HISTORY_TOKEN_LENGTH,
+    MAX_HISTORY_TOKENS,
+    MAX_MASTERY_ITEMS,
+    MAX_RAW_WHITEBOARD_INPUT_LENGTH,
+    MAX_TELEMETRY_EVENTS,
+    NeuralChatRequest,
+)
 
 
 def valid_payload(
@@ -54,6 +61,24 @@ def valid_payload(
             "active_weakness_arrays": ["algebra"],
             "passed_topics_arrays": ["basic_arithmetic"],
         },
+        "learning_session_state": {
+            "topic": "algebra",
+            "subtopic": "linear_equations",
+            "micro_skill": "linear_equations",
+            "phase": "practice",
+            "attempt": 1,
+            "streak": 1,
+            "mastery_score": 0.62,
+            "state_version": 1,
+            "current_question_id": None,
+            "last_question_ids": [],
+            "correct_pattern": [],
+            "response_time_ms": None,
+            "confidence_level": "medium",
+            "hints_used": 0,
+            "difficulty_level": "easy",
+            "is_retention_check": False,
+        },
     }
 
 
@@ -104,6 +129,14 @@ def test_unknown_tier_is_rejected():
         NeuralChatRequest.model_validate(valid_payload(tier="enterprise"))
 
 
+def test_homework_explainer_mode_is_supported():
+    request = NeuralChatRequest.model_validate(
+        valid_payload(app_execution_mode="homework_explainer")
+    )
+
+    assert request.app_execution_mode == "homework_explainer"
+
+
 def test_correct_answer_is_exam_prep_only():
     with pytest.raises(ValidationError):
         NeuralChatRequest.model_validate(
@@ -136,3 +169,124 @@ def test_correct_answer_allows_exam_prep_option_input():
     )
 
     assert request.current_interaction_context.correct_answer == "A"
+
+
+def test_blank_transaction_id_is_rejected():
+    payload = valid_payload()
+    payload["request_metadata"]["uuid_transaction_id"] = "   "
+
+    with pytest.raises(ValidationError):
+        NeuralChatRequest.model_validate(payload)
+
+
+def test_invalid_timestamp_is_rejected():
+    payload = valid_payload()
+    payload["request_metadata"]["timestamp"] = "tomorrow-ish"
+
+    with pytest.raises(ValidationError):
+        NeuralChatRequest.model_validate(payload)
+
+
+def test_timestamp_requires_timezone():
+    payload = valid_payload()
+    payload["request_metadata"]["timestamp"] = "2026-05-19T12:00:00"
+
+    with pytest.raises(ValidationError):
+        NeuralChatRequest.model_validate(payload)
+
+
+def test_negative_device_latency_is_rejected():
+    payload = valid_payload()
+    payload["request_metadata"]["device_latency_ms"] = -1
+
+    with pytest.raises(ValidationError):
+        NeuralChatRequest.model_validate(payload)
+
+
+def test_blank_student_id_is_rejected():
+    payload = valid_payload()
+    payload["student_identity"]["student_db_id"] = ""
+
+    with pytest.raises(ValidationError):
+        NeuralChatRequest.model_validate(payload)
+
+
+def test_raw_input_length_is_bounded():
+    payload = valid_payload(
+        raw_whiteboard_input="x" * (MAX_RAW_WHITEBOARD_INPUT_LENGTH + 1)
+    )
+
+    with pytest.raises(ValidationError):
+        NeuralChatRequest.model_validate(payload)
+
+
+def test_blank_raw_input_is_rejected():
+    payload = valid_payload(raw_whiteboard_input="   ")
+
+    with pytest.raises(ValidationError):
+        NeuralChatRequest.model_validate(payload)
+
+
+def test_history_count_is_bounded_before_tier_trim():
+    payload = valid_payload(history_tokens=["turn"] * (MAX_HISTORY_TOKENS + 1))
+
+    with pytest.raises(ValidationError):
+        NeuralChatRequest.model_validate(payload)
+
+
+def test_history_token_length_is_bounded():
+    payload = valid_payload(history_tokens=["x" * (MAX_HISTORY_TOKEN_LENGTH + 1)])
+
+    with pytest.raises(ValidationError):
+        NeuralChatRequest.model_validate(payload)
+
+
+def test_mastery_arrays_are_bounded():
+    payload = valid_payload()
+    payload["historical_mastery_map"]["active_weakness_arrays"] = ["algebra"] * (
+        MAX_MASTERY_ITEMS + 1
+    )
+
+    with pytest.raises(ValidationError):
+        NeuralChatRequest.model_validate(payload)
+
+
+def test_telemetry_arrays_are_bounded():
+    payload = valid_payload()
+    payload["emotional_telemetry"]["rage_clicks"] = ["rapid_click"] * (
+        MAX_TELEMETRY_EVENTS + 1
+    )
+
+    with pytest.raises(ValidationError):
+        NeuralChatRequest.model_validate(payload)
+
+
+def test_low_cardinality_signals_are_normalized():
+    payload = valid_payload()
+    payload["cognitive_aptitude_profile"]["scaffolding_flag"] = " HIGH "
+    payload["cognitive_aptitude_profile"]["complexity_tolerance"] = " LOW "
+    payload["emotional_telemetry"]["sentiment_trends"] = " Declining "
+    payload["emotional_telemetry"]["detected_frustration_signals"] = [" CONFUSED "]
+
+    request = NeuralChatRequest.model_validate(payload)
+
+    assert request.cognitive_aptitude_profile.scaffolding_flag == "high"
+    assert request.cognitive_aptitude_profile.complexity_tolerance == "low"
+    assert request.emotional_telemetry.sentiment_trends == "declining"
+    assert request.emotional_telemetry.detected_frustration_signals == ["confused"]
+
+
+def test_unknown_low_cardinality_signal_is_rejected():
+    payload = valid_payload()
+    payload["cognitive_aptitude_profile"]["scaffolding_flag"] = "extreme"
+
+    with pytest.raises(ValidationError):
+        NeuralChatRequest.model_validate(payload)
+
+
+def test_focus_integrity_must_be_ratio():
+    payload = valid_payload()
+    payload["emotional_telemetry"]["latency_focus_integrity"] = 1.5
+
+    with pytest.raises(ValidationError):
+        NeuralChatRequest.model_validate(payload)

@@ -19,9 +19,25 @@ class Settings(BaseSettings):
     tier_free_max_history_turns: int = Field(default=1, ge=0)
     tier_premium_max_history_turns: int = Field(default=3, ge=0)
     embedding_model_name: str = "BAAI/bge-small-en-v1.5"
+    sabi_demo_mode: bool = False
     sabi_bootstrap_mock_data: bool = True
     sympy_timeout_ms: int = Field(default=250, ge=1)
     sympy_max_workers: int = Field(default=1, ge=1)
+    llm_timeout_seconds: float = Field(default=2.5, gt=0)
+    llm_queue_timeout_seconds: float = Field(default=0.05, ge=0)
+    llm_max_concurrent_requests: int = Field(default=4, ge=1)
+    llm_retry_attempts: int = Field(default=1, ge=1)
+    llm_retry_min_seconds: float = Field(default=0.05, ge=0)
+    llm_retry_max_seconds: float = Field(default=0.2, ge=0)
+    llm_circuit_failure_threshold: int = Field(default=5, ge=1)
+    llm_circuit_reset_seconds: float = Field(default=20.0, gt=0)
+    request_admission_max_concurrent: int = Field(default=24, ge=1)
+    request_admission_queue_timeout_seconds: float = Field(default=0.01, ge=0)
+    observability_trace_buffer_size: int = Field(default=1000, ge=1)
+    observability_trace_flush_enabled: bool = True
+    observability_trace_flush_interval_seconds: float = Field(default=1.0, gt=0)
+    observability_trace_flush_batch_size: int = Field(default=100, ge=1)
+    observability_trace_log_path: str = "logs/sabipass_traces.jsonl"
 
 
 _ENV_FIELD_BY_NAME = {

@@ -39,10 +39,9 @@ PIDGIN_CONFUSION_TERMS = {
 }
 SCAFFOLDING_WEIGHTS = {"medium": 0, "high": 1}
 INTENT_WEIGHTS = {
-    "answer_request": 1,
-    "correction": 1,
     "explanation": 1,
-    "remediation": 1,
+    "confusion": 1,
+    "evaluation": 0,
 }
 
 

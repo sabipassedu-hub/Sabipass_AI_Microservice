@@ -39,6 +39,7 @@ def _run_sympy_task(task_name: str, payload: dict[str, Any]) -> Any:
     if task_name == "factor_and_solve_zero":
         expression = parse_expr(payload["expression"], local_dict={"x": x})
         return {
+            "expression": str(expression),
             "factorized": str(factor(expression)),
             "roots": [str(root) for root in solve(Eq(expression, 0), x)],
         }

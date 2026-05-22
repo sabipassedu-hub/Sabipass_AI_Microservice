@@ -17,14 +17,18 @@ nosetests.xml
 coverage.xml
 *.cover
 *.log
+logs/*.jsonl
 .git
 .mypy_cache
 .pytest_cache
+.pytest_tmp/
 .hypothesis/
 # .gitignore
 .env
 .aider*
-data/raw/
+data/raw/*
+!data/raw/mock/
+!data/raw/mock/waec_mathematics_mock_parse.json
 data/embeddings/
 data/test_embeddings/
 data/logs/*.jsonl

@@ -53,6 +53,13 @@ def embed_query_text(text: str) -> list[float]:
     return [float(value) for value in embeddings[0]]
 
 
+def warm_embedding_model() -> str:
+    """Load the configured FastEmbed model before demo traffic arrives."""
+    model_name = get_settings().embedding_model_name
+    list(_get_text_embedding().embed(["sabi pass embedding warmup"]))
+    return model_name
+
+
 @lru_cache(maxsize=1)
 def _get_text_embedding() -> TextEmbedding:
     return TextEmbedding(model_name=get_settings().embedding_model_name)

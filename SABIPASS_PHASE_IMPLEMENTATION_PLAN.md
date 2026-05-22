@@ -102,6 +102,6 @@ Status markers:
 
 ## Latest Session Notes
 
-- Replaced fragile env reads with `.env`-aware settings and safe demo defaults.
-- Added FastEmbed RAG seeding for all demo Chroma collections and SymPy/math-verify grounding for surds/quadratics.
-- Verified live FastAPI scenarios and full suite: 120 passed.
+- Fixed tutoring control flow so known learning state anchors valid math follow-ups instead of falling into topic clarification.
+- Added strict LLM response contracts and structured local tutoring fallbacks for explanation, practice, and correction.
+- Verified full suite with temp pytest cache override: 187 passed.
