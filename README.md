@@ -2,6 +2,10 @@
 
 > Python-based AI cognition service for personalized tutoring, curriculum support, homework explanation, and WAEC/JAMB exam preparation.
 
+Developed by: Wisdom Ekwugha
+
+LinkedIn: https://www.linkedin.com/in/wisdom-ekwugha
+
 [![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-API-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
@@ -277,3 +281,8 @@ The core demo pipeline is implemented, including contract validation, strategy c
 ## License and Commercial Use
 
 This repository contains proprietary SabiPass product technology. Licensing, deployment, and commercial-use terms should be agreed with the SabiPass project owners before redistribution or production use.
+
+## Author
+
+Name: Wisdom Ekwugha
+LinkedIn: https://www.linkedin.com/in/wisdom-ekwugha
